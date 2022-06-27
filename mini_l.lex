@@ -64,6 +64,10 @@ DIGIT    [0-9]
 
 "\n"           {currLine++; currPos = 1;}
 
+"(\d+|_+)\D+"  {printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", currLine, currPos, yytext); exit(0);}
+
+"\D+_+"        {printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", currLine, currPos, yytext); exit(0);}
+
 .              {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", currLine, currPos, yytext); exit(0);}
 
 %%
