@@ -65,13 +65,13 @@ COMMENT  ##.*
 
 [ \t]+         {/* ignore spaces */ currPos += yyleng;}
 
+{COMMENT}      {currLine++; currPos = 1;}
+
 "\n"           {currLine++; currPos = 1;}
 
 ({DIGIT}+|_+){NONDIGIT}+   {printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", currLine, currPos, yytext); exit(0);}
 
 {NONDIGIT}+_+              {printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", currLine, currPos, yytext); exit(0);}
-
-{COMMENT}      {currLine++; currPos = 1;}
 
 .              {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", currLine, currPos, yytext); exit(0);}
 
