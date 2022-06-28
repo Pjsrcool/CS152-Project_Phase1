@@ -3,6 +3,7 @@
 %}
 
 DIGIT    [0-9]
+NONDIGIT [A-Za-z]
    
 %%
 
@@ -59,10 +60,15 @@ DIGIT    [0-9]
 ":="            {printf("ASSIGN\n"); currPos += yyleng;}
 
 {DIGIT}+       {printf("NUMBER %s\n", yytext); currPos += yyleng;}
+({NONDIGIT}+_?{NONDIGIT})+  {printf("IDENT %s\n", yytext); currPos += yyleng;}
 
 [ \t]+         {/* ignore spaces */ currPos += yyleng;}
 
 "\n"           {currLine++; currPos = 1;}
+
+({DIGIT}+|_+){NONDIGIT}+   {printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", currLine, currPos, yytext); exit(0);}
+
+{NONDIGIT}+_+              {printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", currLine, currPos, yytext); exit(0);}
 
 .              {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", currLine, currPos, yytext); exit(0);}
 
